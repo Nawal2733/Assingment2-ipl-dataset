@@ -91,6 +91,7 @@ def plotgraph(d):
     plt.xticks(rotation='90')
     plt.xlabel("Name Of Bowlers", fontweight='bold')
     plt.ylabel("Economic", fontweight="bold")
+    plt.show()
 
-
+    
 readcsvFile()
