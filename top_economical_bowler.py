@@ -31,7 +31,6 @@ def readcsvFile():
     last_index = str(years.index('2015') + years.count('2015'))
     
     # Read deliveries.csv file
-    bowler_list = []
     with open('deliveries.csv') as csvFile:
         reader = csv.reader(csvFile)
         next(reader)
@@ -42,16 +41,16 @@ def readcsvFile():
     csvFile.close()
     
     #call the logic function
-    logic(first_index, last_index, bowler_list)
+    logic(first_index, last_index)
     
     
 # Create the Login of Extract useful Data  
-def logic(first_index, last_index, bowler_list):
-    
+def logic(first_index, last_index):
+    bowler_list = []
     # find all the indivisual bowler bowl in 2015 ipl matche
-    for i in range(match_id.index(first_index), match_id.index(last_index)):
-        if bowlers[i] not in bowler_list:
-            bowler_list.append(bowlers[i])
+    bowler_list.append(bowlers[match_id.index(first_index):match_id.index(last_index)+match_id.count(last_index)])
+    bowler_list = set(bowler_list[0])
+    #print(len(bowler_list))
     
     over_of_all = []
     runs = []
@@ -63,13 +62,13 @@ def logic(first_index, last_index, bowler_list):
         for i in range(match_id.index(first_index), match_id.index(last_index)):
             if b == bowlers[i]:
                 run += int(total_run_per_ball[i])
-                if b != bowlers[i+1]:
+                if b != bowlers[i+1]:  #count
                     over += 1
         runs.append(run)            
         over_of_all.append(over)
         dict_eco_bowler[run/over] = b
     
-    # Sort the dictionary according to top economy and insert in d
+    # Sort the dictionary according to top 10 economy bowlers and insert in d
     count = 0
     d = {}
     for i in sorted(dict_eco_bowler.keys(), reverse = True):
