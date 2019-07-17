@@ -40,13 +40,10 @@ def logic(team, year):
     team_win = []
     #Login to Find the team win per year
     for t in team:
-        a = []
+        win_count = []
         for y in year:
-            w = []
-            for i in range(years.index(y), years.index(y) + years.count(y)):
-                w.append(winners[i])
-            a.append(w.count(t))
-        team_win.append(a)
+             win_count.append(winners[years.index(y):years.index(y) + years.count(y)].count(t))
+        team_win.append(win_count)
 
     #call the plotGraph function
     plotGraph(team_win, team, year)
