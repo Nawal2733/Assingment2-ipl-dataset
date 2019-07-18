@@ -85,7 +85,8 @@ def logic(first_index, last_index):
 
 #plot the graph
 def plotgraph(d):
-    plt.bar(*zip(*d.items()), color="r")
+    #plt.bar(*zip(*d.items()), color="r")
+    plt.bar(d.keys(), d.values(), color='c')
     plt.title("Top 10 Economical Bowler of Year 2015 IPL", fontweight="bold")
     plt.xticks(rotation='90')
     plt.xlabel("Name Of Bowlers", fontweight='bold')
