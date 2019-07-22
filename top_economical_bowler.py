@@ -51,9 +51,7 @@ def logic(first_index, last_index):
     bowler_list.append(bowlers[match_id.index(first_index):match_id.index(last_index)+match_id.count(last_index)])
     bowler_list = set(bowler_list[0])
     #print(len(bowler_list))
-    
-    over_of_all = []
-    runs = []
+   
     dict_eco_bowler = {}
     #calculate the economy of all bowler , which bowl in 2015 ipl
     for b in bowler_list:
@@ -64,8 +62,6 @@ def logic(first_index, last_index):
                 run += int(total_run_per_ball[i])
                 if b != bowlers[i+1]:  #count
                     over += 1
-        runs.append(run)            
-        over_of_all.append(over)
         dict_eco_bowler[run/over] = b
     
     # Sort the dictionary according to top 10 economy bowlers and insert in d
@@ -77,7 +73,7 @@ def logic(first_index, last_index):
             count += 1
         else:
             break
-    #print(d)
+    
     
     #call the plotgraph function
     plotgraph(d)
@@ -85,7 +81,6 @@ def logic(first_index, last_index):
 
 #plot the graph
 def plotgraph(d):
-    #plt.bar(*zip(*d.items()), color="r")
     plt.bar(d.keys(), d.values(), color='c')
     plt.title("Top 10 Economical Bowler of Year 2015 IPL", fontweight="bold")
     plt.xticks(rotation='90')
