@@ -33,12 +33,12 @@ def readcsvFile():
     logic(team, year)
 
 
-#define login function
+#define logic function
 def logic(team, year):
     
     year.sort()
     team_win = []
-    #Login to Find the team win per year
+    #Logic to Find the team win per year
     for t in team:
         win_count = []
         for y in year:
