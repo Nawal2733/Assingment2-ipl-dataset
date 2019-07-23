@@ -5,19 +5,12 @@ Created on Sun Jul 14 13:14:32 2019
 
 @author: nawal
 """
-
 import matplotlib.pyplot as plt
 import csv
 
-
 years = []
-bowlers = []
-match_id = []
-total_run_per_ball = []
-
 
 def readcsvFile():
-    
     # Read matches.csv file
     with open('matches.csv') as csvFile:
         reader = csv.reader(csvFile)
@@ -27,66 +20,43 @@ def readcsvFile():
     csvFile.close()
     
     #find first and last index of year 2015
-    first_index = str(years.index('2015'))
-    last_index = str(years.index('2015') + years.count('2015'))
+    first_index = years.index('2015') + 1
+    last_index = years.index('2015') + years.count('2015')
     
+    run = {}
+    over = {}
     # Read deliveries.csv file
     with open('deliveries.csv') as csvFile:
         reader = csv.reader(csvFile)
         next(reader)
         for row in reader:
-            match_id.append(row[0])
-            bowlers.append(row[8])
-            total_run_per_ball.append(row[17])
+            if int(row[0])>=first_index and int(row[0])<=last_index:
+                if row[8] not in run.keys():
+                    run[row[8]] = int(row[17])
+                    over[row[8]] = 1
+                else:
+                    run[row[8]] = (run[row[8]]+int(row[17]))
+                    over[row[8]] = (over[row[8]]+1)
+                    
+            elif int(row[0])>last_index:
+                break
+            
+        over_dict = {k:v//6 for k, v in over.items()}
     csvFile.close()
-    
-    #call the logic function
-    logic(first_index, last_index)
-    
-    
-# Create the Login of Extract useful Data  
-def logic(first_index, last_index):
-    bowler_list = []
-    # find all the indivisual bowler bowl in 2015 ipl matche
-    bowler_list.append(bowlers[match_id.index(first_index):match_id.index(last_index)+match_id.count(last_index)])
-    bowler_list = set(bowler_list[0])
-    #print(len(bowler_list))
-   
-    dict_eco_bowler = {}
-    #calculate the economy of all bowler , which bowl in 2015 ipl
-    for b in bowler_list:
-        over = 0
-        run = 0
-        for i in range(match_id.index(first_index), match_id.index(last_index)):
-            if b == bowlers[i]:
-                run += int(total_run_per_ball[i])
-                if b != bowlers[i+1]:  #count
-                    over += 1
-        dict_eco_bowler[run/over] = b
-    
-    # Sort the dictionary according to top 10 economy bowlers and insert in d
-    count = 0
-    d = {}
-    for i in sorted(dict_eco_bowler.keys(), reverse = True):
-        if count<10 :
-            d[dict_eco_bowler[i]] = i
-            count += 1
-        else:
-            break
-    
-    
-    #call the plotgraph function
-    plotgraph(d)
-
+    # Economy of each bowler of 2015
+    economy_dict = {k: run[k]/over_dict[k] for k in run.keys() & over_dict}
+    # calculate the top 10 economical bowlers
+    data = dict(sorted(economy_dict.items(), key=lambda x: x[1], reverse=True)[:10])
+    plotgraph(data)
 
 #plot the graph
-def plotgraph(d):
-    plt.bar(d.keys(), d.values(), color='c')
+def plotgraph(data):
+    plt.bar(data.keys(), data.values(), color='c')
     plt.title("Top 10 Economical Bowler of Year 2015 IPL", fontweight="bold")
     plt.xticks(rotation='90')
     plt.xlabel("Name Of Bowlers", fontweight='bold')
     plt.ylabel("Economic", fontweight="bold")
     plt.show()
 
-    
+
 readcsvFile()
